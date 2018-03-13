@@ -1,48 +1,22 @@
 import math
 
 def make_bezier():
-    t = new_matrix()
-    ident(t)
-    
-    t[0][1] = 3
-    t[0][2] = -3
-    t[0][3] = 1
-    
-    t[1][0] = 3
-    t[1][1] = -6
-    t[1][2] = 3
-    
-    t[2][0] = -3
-    t[2][1] = 3
-    t[2][2] = 0
-    
-    t[3][0] = 1
-    t[3][3] = 0
-    
+    t = [[-1,3,-3,1], [3,-6,3,0], [-3,3,0,0], [1,0,0,0]]
     return t
 
 def make_hermite():
-    t = new_matrix()
-    ident(t)
-    
-    t[0][0] = 2
-    t[0][1] = -2
-    t[0][2] = 1
-    t[0][3] = 1
-    
-    t[1][0] = -3
-    t[1][1] = 3
-    t[1][2] = -2
-    t[1][3] = -1
-    
-    t[3][0] = 1
-    t[3][3] = 0
-    
+    t = [[2,-3,0,1], [-2,3,0,0], [1,-2,1,0], [1,-1,0,0]]
     return t
 
+#t: 0 -> bezier 1 -> Hermite
 def generate_curve_coefs( p1, p2, p3, p4, t ):
-    pass
-
+    if t == 0: #bezier
+        matr = make_bezier()
+    else:
+        matr = make_hermite()
+    points = [[p1,p2,p3,p4]]
+    matrix_mult(matr, points)
+    return points
 
 def make_translate( x, y, z ):
     t = new_matrix()
@@ -110,7 +84,7 @@ def matrix_mult( m1, m2 ):
     for row in m2:
         #get a copy of the next point
         tmp = row[:]
-        
+
         for r in range(4):
             m2[point][r] = (m1[0][r] * tmp[0] +
                             m1[1][r] * tmp[1] +
